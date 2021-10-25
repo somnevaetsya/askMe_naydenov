@@ -7,27 +7,30 @@ from django.core.paginator import Paginator
 questions = [
     {
         "title": f"Title {i}",
-        "id":i,
+        "id": i,
         "text": f"This is text for {i} question.",
     } for i in range(20)
 ]
 
 
-def index(request):
-    paginator = Paginator(questions, 5)
+def pagination(request, listing, n):
+    paginator = Paginator(listing, n)
     page = request.GET.get('page')
     content = paginator.get_page(page)
+    return content
+
+
+def index(request):
+    content = pagination(request, questions, 10)
     return render(request, "index.html", {'questions': content})
 
 
-# def hot(request):
-#     return render(request, "base.html", )
+def hot(request):
+    return render(request, "base.html", )
 
 
 def tags(request):
-    paginator = Paginator(questions, 5)
-    page = request.GET.get('page')
-    content = paginator.get_page(page)
+    content = pagination(request, questions, 5)
     return render(request, "tags.html", {'questions': content})
 
 
@@ -39,9 +42,7 @@ answers = [
 
 
 def question(request):
-    paginator = Paginator(answers, 3)
-    page = request.GET.get('page')
-    content = paginator.get_page(page)
+    content = pagination(request, answers, 5)
     return render(request, "question.html", {'questions': content})
 
 

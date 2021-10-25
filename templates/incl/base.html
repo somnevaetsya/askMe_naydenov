@@ -13,36 +13,40 @@
 <body class="d-flex flex-column h-100">
 
 
-<header class="flex-wrap justify-content-center py-3 mb-4 border-bottom align-items-center bg-light">
-    <nav class="navbar navbar-light bg-light">
-        <div class="container-fluid">
-            <div>
-                <img class = "avatar" src="{% static "img/vopros.jpg" %}" alt="">
-                <a class="navbar-brand mx-4" href="{% url "index" %}">AskMe</a>
-            </div>
+<header class="flex-wrap border-bottom bg-light">
+    <nav class="navbar navbar-light bg-light justify-content-between" style="height: 120px">
+                <div style="display: flex; align-items: center">
+                        <img class = "avatar" src="{% static "img/vopros.jpg" %}" alt="" style="height: 60px; width: 60px">
+                         <a class="navbar-brand mx-4" href="{% url "index" %}">AskMe</a>
+                    </div>
             <form class="d-flex">
                 <input class="form-control me-2 search_button" type="search" placeholder="Find your question..." aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Ask a question</button>
+                <button class="btn btn-outline-success" type="submit">
+                        Ask a question
+                </button>
             </form>
             <div class="person_container">
-                <div class="row align-items-center">
-                    <div class="col">
-                        <img class = "avatar" src="{%  static "img/cat_s_papirosoy.jpg" %}" alt="">
+                <div class="row d-flex align-items-center">
+                    <div class="col-4" >
+                        <img class = "avatar" src="{%  static "img/cat_s_papirosoy.jpg" %}" alt="" style="height: 70px; width: 70px">
                     </div>
                     <div class="col">
-                        <h5>NickName</h5>
+                         <div class="row">
+                        <h5 class="mt-2">NickName</h5>
+                         </div>
                         <div class="row">
-                            <p class = "person_info">
+                            <p class = "person_info my-1">
                                 <a href="{% url "settings" %}" style='text-decoration: none; color : black'>Settings</a>
                             </p>
-                            <p class = "person_info">
+                            <div class="row">
+                            <p class = "person_info my-1">
                                 <a href="{% url "index" %}" style='text-decoration: none; color : #b02a37'>LogOut</a>
                             </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
     </nav>
 </header>
 
