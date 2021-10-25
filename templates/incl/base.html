@@ -1,0 +1,128 @@
+{%  load static %}
+<!doctype html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Main page</title>
+
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/my.css" %}" rel="stylesheet">
+</head>
+
+<body class="d-flex flex-column h-100">
+
+
+<header class="flex-wrap justify-content-center py-3 mb-4 border-bottom align-items-center bg-light">
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+            <div>
+                <img class = "avatar" src="{% static "img/vopros.jpg" %}" alt="">
+                <a class="navbar-brand mx-4" href="{% url "index" %}">AskMe</a>
+            </div>
+            <form class="d-flex">
+                <input class="form-control me-2 search_button" type="search" placeholder="Find your question..." aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Ask a question</button>
+            </form>
+            <div class="person_container">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <img class = "avatar" src="{%  static "img/cat_s_papirosoy.jpg" %}" alt="">
+                    </div>
+                    <div class="col">
+                        <h5>NickName</h5>
+                        <div class="row">
+                            <p class = "person_info">
+                                <a href="{% url "settings" %}" style='text-decoration: none; color : black'>Settings</a>
+                            </p>
+                            <p class = "person_info">
+                                <a href="{% url "index" %}" style='text-decoration: none; color : #b02a37'>LogOut</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+<main class="flex-shrink-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-10">
+                {% block content %}
+                {% endblock content %}
+            </div>
+            <div class="col-2">
+                <h2 class="mb-3">Popular tags</h2>
+                <div class="row">
+                    <div class="col">
+                        <a href="{%url "tags" %}" >Pytron</a>
+                    </div>
+                    <div class="col">
+                        <a href="{%url "tags" %}" >Pc+==awd=awd</a>
+                    </div>
+                    <div class="col">
+                        <a href="{%url "tags" %}" >Pythonsdakjfjas</a>
+                    </div>
+                    <div class="col">
+                        <a href="{%url "tags" %}" >Pythonawd</a>
+                    </div>
+                    <div class="col">
+                        <a href="{%url "tags" %}" >Python</a>
+                    </div>
+                    <div class="col">
+                        <a href="{%url "tags" %}" >Python</a>
+                    </div>
+                    <div class="col">
+                        <a href="{%url "tags" %}" >Python</a>
+                    </div>
+                    <div class="col">
+                        <a href="{%url "tags" %}" >Python</a>
+                    </div>
+                </div>
+                <h2 class="mt-5">Best Members</h2>
+                <div class="row">
+                    <div class="col">
+                        <a href="{%url "index" %}" >Vasya</a>
+                    </div>
+                    <div class="col">
+                        <a href="{%url "index" %}" >Petya</a>
+                    </div>
+                    <div class="col">
+                        <a href="{%url "index" %}" >Kolya</a>
+                    </div>
+                    <div class="col">
+                        <a href="{%url "index" %}" >Python</a>
+                    </div>
+                    <div class="col">
+                        <a href="{%url "index" %}" >Dima</a>
+                    </div>
+                    <div class="col">
+                        <a href="{%url "index" %}" >VOVA</a>
+                    </div>
+                    <div class="col">
+                        <a href="{%url "index" %}" >Peter</a>
+                    </div>
+                    <div class="col">
+                        <a href="{%url "index" %}" >Kostik</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</main>
+
+<footer class="footer mt-auto py-3 bg-light ">
+    <div class="container">
+        {% block pagination %}
+        {% endblock pagination %}
+        <span class="text-muted mx-4">technopark2021</span>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+{% extends  'incl/base_with_pagination.html' %}
+{%  load static %}
+{% block content %}
+
+    <h2 class="mx-5">Questions</h2>
+    {% for question in questions %}
+        {% include 'incl/one_que.html' %}
+    {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% load static %}
+{% block content %}
+    <div class="row one_que justify-content-center">
+    <div class="col-3 text-center">
+        <img class="avatar" src="{%  static "img/cat_s_papirosoy.jpg" %}" alt="">
+    </div>
+    <div class="col-9 ">
+        <h3 class = "my-3">Main question</h3>
+        Main question Main question Main question Main question Main question Main question
+    </div>
+    <div class="row p-0">
+        <div class="col-3 text-center">
+            <div class="row-1 my-3">
+                Rate: +8
+            </div>
+            <div class="row-1 my-3 text-center">
+                <div class="btn btn-outline-dark">Like</div>
+            </div>
+        </div>
+
+        <div class="col-3 my-3">
+            <p class="mt-5">
+                Tags:
+                <a href={% url "tags" %}> c++</a>
+                ,
+                <a href={% url "tags" %}> python</a>
+                </p>
+        </div>
+    </div>
+    </div>
+{% endblock content %}
