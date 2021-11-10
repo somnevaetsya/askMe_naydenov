@@ -61,57 +61,20 @@
             <div class="col-2">
                 <h2 class="mb-3">Popular tags</h2>
                 <div class="row">
-                    <div class="col">
-                        <a href="{%url "tags" %}" >Pytron</a>
-                    </div>
-                    <div class="col">
-                        <a href="{%url "tags" %}" >Pc+==awd=awd</a>
-                    </div>
-                    <div class="col">
-                        <a href="{%url "tags" %}" >Pythonsdakjfjas</a>
-                    </div>
-                    <div class="col">
-                        <a href="{%url "tags" %}" >Pythonawd</a>
-                    </div>
-                    <div class="col">
-                        <a href="{%url "tags" %}" >Python</a>
-                    </div>
-                    <div class="col">
-                        <a href="{%url "tags" %}" >Python</a>
-                    </div>
-                    <div class="col">
-                        <a href="{%url "tags" %}" >Python</a>
-                    </div>
-                    <div class="col">
-                        <a href="{%url "tags" %}" >Python</a>
-                    </div>
+                    {% for tag in tags %}
+                         <div class="col">
+                            <a href="{%url "tag" tag.id %}" >{{ tag.tag_title }}</a>
+                        </div>
+                    {% endfor %}
                 </div>
                 <h2 class="mt-5">Best Members</h2>
                 <div class="row">
-                    <div class="col">
-                        <a href="{%url "index" %}" >Vasya</a>
-                    </div>
-                    <div class="col">
-                        <a href="{%url "index" %}" >Petya</a>
-                    </div>
-                    <div class="col">
-                        <a href="{%url "index" %}" >Kolya</a>
-                    </div>
-                    <div class="col">
-                        <a href="{%url "index" %}" >Python</a>
-                    </div>
-                    <div class="col">
-                        <a href="{%url "index" %}" >Dima</a>
-                    </div>
-                    <div class="col">
-                        <a href="{%url "index" %}" >VOVA</a>
-                    </div>
-                    <div class="col">
-                        <a href="{%url "index" %}" >Peter</a>
-                    </div>
-                    <div class="col">
-                        <a href="{%url "index" %}" >Kostik</a>
-                    </div>
+                {% for profile in profiles %}
+                         <div class="col">
+                            <a href="{%url "index" %}" >{{ profile.person_ans.nickname }}</a>
+                        </div>
+                    {% endfor %}
+
                 </div>
             </div>
 

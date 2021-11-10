@@ -1,20 +1,86 @@
 from django.contrib.auth.models import User
 from datetime import date
 from django.db import models
+from django.urls import reverse
+from django.db.models import Count
 
 
 # Create your models here.
+class QuestionManager(models.Manager):
+    def new_que(self):  #сортируем по дате, чтобы найти свежие
+        return self.all()
+
+    def get_tag(self, index, i):   #по индексу определяет тэг
+        tags = Question.objects.get(id=index).tag.all()
+        return tags[i].tag_title
+
+    def get_que_tag(self, title):
+        ques = Question.objects.all()
+        return ques.filter(tag__tag_title=title)
+
+    def hot_que(self, i): #считаем количество ответов на вопрос и сортируем, начиная с большего
+        hot_questions = Question.objects.annotate(count=Count('que')).order_by("-count")
+        return hot_questions[i]
+
+
+class AnswerManager(models.Manager):
+    def count_answ(self, index): #посчитать ответы
+        find_title = Question.objects.get(id=index).title
+        return self.filter(que__title=find_title).count()
+
+    def get_answer(self, index, i): #получить ответ по индексу
+        find_title = Question.objects.get(id=index).title
+        return Answer.objects.filter(que__title=find_title)[i]
+
+
+class TagManager(models.Manager):
+    def hot_tags(self): #лучшие теги
+        return self.order_by("rating").reverse()[:10]
+
+    def count_tags(self, tag): #посчитать теги
+        return self.filter(tag_title=tag).count()
+
+    def que_tag(self, tag, i): #вот тут что-то непонятное
+        tags = Question.objects.all().filter(tag_title=tag) #такого поля не существует
+        return tags[i]
+
+
+class ProfileManager(models.Manager):
+    def best_profiles(self): #лучшие из лучших
+        return Answer.objects.annotate(count=Count('person_ans')).order_by("-count")[:10]
+
+
+class LikeToQueManager(models.Manager):
+    def count_like_que(self, index): #посчитать количество лайков на вопрос
+        find_title = Question.objects.get(id=index).title
+        return self.filter(like_que__title=find_title).count()
+
+
+class LikeToAnsManager(models.Manager):
+    def count_like_ans(self, index): #количество лайков на ответ
+        find_text = Answer.objects.get(id=index).text_ans
+        return self.filter(like_ans__text_ans=find_text).count()
+
+
 class Tag(models.Model):
     tag_title = models.CharField(max_length=256)
     rating = models.IntegerField(default=0)
 
+    objects = TagManager()
+
     def __str__(self):
-        return self.tag_title
+        return ' '.join([self.tag_title, str(self.rating)])
+
+    def get_edit_url(self):
+        return reverse('tag', args=(self.pk,))
 
 
 class Profile(models.Model):
     nickname = models.CharField(max_length=256)
     avatar = models.ImageField(blank=True, default='')
+
+    objects = ProfileManager()
+
     # user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user')
 
     def __str__(self):
@@ -26,8 +92,10 @@ class Answer(models.Model):
     person_ans = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='person_ans', default='')
     que = models.ForeignKey('Question', on_delete=models.CASCADE, related_name='que', default='')
 
+    objects = AnswerManager()
+
     def __str__(self):
-        return ' '.join([self.text_ans[0:10], "..."])
+        return self.text_ans
 
 
 class Question(models.Model):
@@ -37,61 +105,31 @@ class Question(models.Model):
     tag = models.ManyToManyField(Tag, related_name='tag')
     person_que = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='person_que', default='')
 
+    objects = QuestionManager()
+
     def __str__(self):
         return self.title
 
+    # def get_absolute_url(self):
+    #     return reverse('question', args=[str(self.id)])
+
 
 class LikeToAns(models.Model):
-    like_ans = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='like_ans', default='')
+    like_ans = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name="like_ans", default='')
+    person_like_ans = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="person_like_ans", default='')
+
+    objects = LikeToAnsManager()
 
     def __str__(self):
-        return str(self.to_ans)
+        return str(self.like_ans.text_ans)
 
 
 class LikeToQue(models.Model):
     like_que = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='like_que', default='')
+    person_like_que = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="person_like_que", default='')
+
+    objects = LikeToQueManager()
 
     def __str__(self):
-        return str(self.to_que)
+        return str(self.like_que.title)
 
-
-
-
-
-
-# class AuthorManager(models.Manager):
-#     def young_authors(self):
-#         self.filter(birth_date__gt=date(2000, 1, 1))
-#
-#
-# class Author(models.Model):
-#     first_name = models.CharField(max_length=256)
-#     last_name = models.CharField(max_length=256)
-#     birth_date = models.DateField(blank=True, null=True)
-#     death_date = models.DateField(blank=True, null=True)
-#
-#     objects = AuthorManager()
-#
-#     def __str__(self):
-#         return ' '.join([self.first_name, self.last_name])
-#
-#
-# class Book(models.Model):
-#     name = models.CharField(max_length=256)
-#     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='books')
-#     published_date = models.DateField(blank=True, null=True)
-#     genres = models.ManyToManyField('Genre', related_name='books')
-#
-#
-# class Genre(models.Model):
-#     name = models.CharField(max_length=256)
-#
-#
-# class BookInstance(models.Model):
-#     book = models.ForeignKey(Book, on_delete=models.PROTECT)
-#     STATUS_CHOICE = [
-#         ('t', 'Taken'),
-#         ('a', 'Available'),
-#         ('m', 'Maintenance')
-#     ]
-#     status = models.CharField(max_length=1, choices=STATUS_CHOICE, default='a')
